@@ -13,15 +13,17 @@
 import { useState } from "react";
 
 
-const ProjectForm = () => {
+const ProjectForm = ({onAddProject}) => {
 
-  const  [formData, setFormData] = useState({
+  const initialValues = {
     name: "",
     about: "",
     phase: "",
     link: "",
     image: "",
-  });
+  }
+
+  const  [formData, setFormData] = useState(initialValues);
 
   const { name, about, phase, link, image} = formData;
 
@@ -32,9 +34,32 @@ const ProjectForm = () => {
   setFormData({...formData, [name]: value});
   }
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const configPost = {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body : JSON.stringify(formData)
+      
+    }
+
+    fetch("http://localhost:4000/projects",configPost)
+
+    .then(res => res.json())
+    .then(newProject => {
+      onAddProject(newProject);
+
+      setFormData(initialValues);
+    })
+  }
+
   return (
     <section>
-      <form className="form" autoComplete="off">
+      <form className="form" autoComplete="off" onSubmit={handleSubmit}>
         <h3>Add New Project</h3>
 
         <label htmlFor="name">Name</label>

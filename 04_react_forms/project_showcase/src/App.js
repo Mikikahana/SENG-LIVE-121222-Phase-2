@@ -27,10 +27,19 @@ const App = () => {
 
   const onToggleDarkMode = () => setIsDarkMode(!isDarkMode);
 
+  // Helper function for Adding each new project to "project"
+
+  const onAddProject = (newProject) => {
+    
+    setProjects([...projects, newProject]);
+  }
+
   return (
     <div className={isDarkMode ? "App" : "App light"}>
       <Header isDarkMode={isDarkMode} onToggleDarkMode={onToggleDarkMode} />
-      <ProjectForm />
+      <ProjectForm 
+        onAddProject={onAddProject}
+      />
       <button onClick={handleClick}>Load Projects</button>
       <ProjectList projects={projects} />
     </div>
